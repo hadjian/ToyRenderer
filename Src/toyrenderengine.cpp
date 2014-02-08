@@ -1,7 +1,9 @@
 #include "toyrenderengine.h"
 
 #include <assert.h>
-#include <stdio.h>
+#include <cstdio>
+#include <cstdlib>
+using namespace std;
 
 ToyRenderEngine::ToyRenderEngine() {
 }

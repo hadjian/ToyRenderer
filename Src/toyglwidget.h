@@ -12,7 +12,6 @@ typedef enum {LINE_BEGIN, LINE_FOLLOW} LineState;
 
 class ToyGLWidget : public QGLWidget
 {
-    Q_OBJECT
 public:
   explicit ToyGLWidget(ToyRenderEngine* engine, QWidget *parent = 0);
   ~ToyGLWidget();

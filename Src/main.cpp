@@ -2,6 +2,8 @@
 #include "toyrenderengine.h"
 #include <toymatrix.h>
 #include <toyvector.h>
+#include <cstdio>
+using namespace std;
 
 #include <QtGui/QApplication>
 

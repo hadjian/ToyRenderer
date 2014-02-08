@@ -1,3 +1,5 @@
+
+#include <GL/glew.h>
 #include "toyglwidget.h"
 #include "toyrenderengine.h"
 //#include <toymatrix.h>
