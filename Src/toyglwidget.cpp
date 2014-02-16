@@ -1,3 +1,4 @@
+#include<iostream>
 
 #include <GL/glew.h>
 #include "toyglwidget.h"
@@ -30,6 +31,24 @@ ToyGLWidget::~ToyGLWidget()
 
 void ToyGLWidget::initializeGL()
 {
+  GLenum err = glewInit();
+  //Check for extension availability.
+  if (GLEW_OK != err)
+  {
+    /* Problem: glewInit failed, something is seriously wrong. */
+    fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
+    delete this;
+  }
+  if ( glewGetExtension("GL_ARB_vertex_buffer_object") )
+          {
+              std::cout << "VBO supported." << std::endl;
+          }
+      else
+          {
+              std::cerr << "ARB_vertex_buffer_object not supported!" << std::endl;
+          }
+  
+
   glClearColor(0.0, 0.0, 0.0, 0.0);
 
   // Create and initialize first buffer.
@@ -46,7 +65,7 @@ void ToyGLWidget::initializeGL()
 
 void ToyGLWidget::resizeGL(int width, int height)
 {
-  if ((width <= 0)||(height <= 0)) return; // Avoid GL_INVALID_VALUE with glOrtho! Happens with MPR displays at first show.
+  if ((width <= 0)||(height <= 0)) return; 
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   glOrtho(0.0,(GLdouble)width,(GLdouble)height,0.0,-100.0,100.0);
