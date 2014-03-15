@@ -5,8 +5,81 @@
 #include <cstdlib>
 using namespace std;
 
-ToyRenderEngine::ToyRenderEngine() {
+ToyRenderEngine::ToyRenderEngine() 
+{
+
 }
+
+ToyRenderEngine::~ToyRenderEngine()
+{
+  while (!Geometries.isEmpty())
+  {
+    delete Geometries.takeFirst();
+  }
+}
+
+void ToyRenderEngine::render(const ToyCamera& camera, char* buffer, const struct ToySizei& bufferSize)
+{
+  foreach (ToyGeometry *geometry, Geometries)
+  {
+    ToyVector<int>** projectedVectors = projectGeometry(*(geometry), camera, bufferSize);  
+  }
+}
+
+void ToyRenderEngine::addGeometry(ToyGeometry* geometry)
+{
+  Geometries.append(geometry);
+}
+
+//-----------------------------------------------------------------------------
+//
+// return value: Array of projected points (Owner: caller)
+//
+//-----------------------------------------------------------------------------
+ToyVector<int>** ToyRenderEngine::projectGeometry(const ToyGeometry& geometry, const ToyCamera& camera, const struct ToySizei& bufferSize) 
+{
+  // Construct the modelview matrix.
+  float viewElements[4*4] = { 1.0, 0.0, 0.0, camera.Position(0)*(-1.0),
+                         0.0, 1.0, 0.0, camera.Position(1)*(-1.0),
+                         0.0, 0.0, 1.0, camera.Position(2)*(-1.0),
+                         0.0, 0.0, 0.0, 1.0                         };
+  float *viewElementsP = new float[4*4];
+  memcpy(viewElementsP, &viewElements, 4*4*sizeof(float));  
+  ToyMatrix<float> modelViewMatrix(4,4,viewElementsP);
+  modelViewMatrix *= geometry.ModelMatrix;
+  modelViewMatrix = ToyMatrix<float>(camera.Basis).transpose() * modelViewMatrix;
+
+  // Calculate scaling and offset to convert to device dependent coordinates. 
+  float viewPort2DeviceW = ((float) bufferSize.Width)/camera.ViewPort.Width;
+  float viewPort2DeviceH = ((float) bufferSize.Height)/camera.ViewPort.Height;
+  int   viewPortOffSetX  = bufferSize.Width/2;
+  int   viewPortOffSetY  = bufferSize.Height/2;
+
+  // Project all vertices of the given geometry.
+  ToyVector<int>** resultVectors = new ToyVector<int>*[geometry.NumVertices];
+  ToyVector<float> tmpVector;
+  float w = 0.0;
+  for (int i=0; i<geometry.NumVertices; i++)
+  {
+    tmpVector = *(geometry.Vertices[i]);
+    tmpVector = modelViewMatrix*tmpVector;  
+    tmpVector(2) *= -1;
+    w = camera.FocalLength / (tmpVector(2)); 
+    
+ 
+    resultVectors[i] = new ToyVector<int>;
+    resultVectors[i]->operator()(0) = (int) (tmpVector(0) * w * viewPort2DeviceW); 
+    resultVectors[i]->operator()(0) += viewPortOffSetX;
+
+    resultVectors[i]->operator()(1) = (int) (tmpVector(1) * w * viewPort2DeviceH); 
+    resultVectors[i]->operator()(1) += viewPortOffSetY; 
+
+    resultVectors[i]->operator()(2) = (int) tmpVector(2);
+    resultVectors[i]->operator()(3) = 1;
+  }
+  return resultVectors;
+}
+
 
 //------------------------------------------------
 // rasterizeLine()
@@ -21,7 +94,8 @@ ToyRenderEngine::ToyRenderEngine() {
 // be on the upper left.
 //
 //------------------------------------------------
-void ToyRenderEngine::rasterizeLine(struct ToyPoint p1, struct ToyPoint p2, char* buffer, struct ToySize bufferSize) {
+void ToyRenderEngine::rasterizeLine(ToyVector<int>** projectedPoints, char* buffer, struct ToySizei bufferSize) {
+/*
   assert(buffer != NULL);
   assert(p1.x >= 0 && p1.y >= 0 && p2.x < bufferSize.width && p2.y < bufferSize.height);
 
@@ -83,4 +157,5 @@ void ToyRenderEngine::rasterizeLine(struct ToyPoint p1, struct ToyPoint p2, char
       error += deltaErrorNE;
     }
   }
+*/
 }

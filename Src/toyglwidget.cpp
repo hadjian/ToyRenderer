@@ -13,20 +13,34 @@ ToyGLWidget::ToyGLWidget(ToyRenderEngine* engine, QWidget *parent) :
   QGLWidget(parent),
   LState(LINE_BEGIN)
 {
+  Camera = new ToyCamera();
+  float *position = new float[4];
+  position[0]=0.0; position[1]=0.0; position[2]=1.0; position[3]=1.0;
+  Camera->Position = ToyVector<float>(4, position);
+  Camera->FocalLength = 0.5;
+  Camera->ViewPort.Width = 1.77;
+  Camera->ViewPort.Height = 1.0;
+  float *baseVectors = new float[4*4];
+  baseVectors[0]=1.0; baseVectors[1]=0.0; baseVectors[2]=0.0; baseVectors[3]=0.0;
+  baseVectors[4]=0.0; baseVectors[5]=1.0; baseVectors[6]=0.0; baseVectors[7]=0.0;
+  baseVectors[8]=0.0; baseVectors[9]=0.0; baseVectors[10]=1.0; baseVectors[11]=0.0;
+  baseVectors[12]=0.0; baseVectors[13]=0.0; baseVectors[14]=0.0; baseVectors[15]=1.0;
+  Camera->Basis = ToyMatrix<float>(4, 4, baseVectors);
   setMouseTracking(true);
   setAutoFillBackground(false);
   CurrentFront=0;
   FrontBackBuffers = new GLuint[2];
   StartPoint = new ToyPoint();
   EndPoint = new ToyPoint();
-  StartPoint->x = EndPoint->x = -1;
-  StartPoint->y = EndPoint->y = -1;
+  StartPoint->X = EndPoint->X = -1;
+  StartPoint->Y = EndPoint->Y = -1;
   Engine = engine;
 }
 
 ToyGLWidget::~ToyGLWidget()
 {
-  delete[] FrontBackBuffers;
+  if (Camera) delete Camera;
+  if (FrontBackBuffers) delete[] FrontBackBuffers;
 }
 
 void ToyGLWidget::initializeGL()
@@ -86,8 +100,8 @@ void ToyGLWidget::mouseMoveEvent(QMouseEvent *e)
   if (LState == LINE_FOLLOW)
   {
     // Start point has been set. Follow with a line.
-    EndPoint->x = e->pos().x();
-    EndPoint->y = height() - 1 - e->pos().y();
+    EndPoint->X = e->pos().x();
+    EndPoint->Y = height() - 1 - e->pos().y();
     drawLine();
   }
 }
@@ -101,13 +115,13 @@ void ToyGLWidget::mouseReleaseEvent(QMouseEvent *e)
 {
   if (LState == LINE_BEGIN)
   {
-    StartPoint->x = e->pos().x();
-    StartPoint->y = height() - 1 - e->pos().y();
+    StartPoint->X = e->pos().x();
+    StartPoint->Y = height() - 1 - e->pos().y();
     LState = LINE_FOLLOW;
   } else
   {
-    EndPoint->x = e->pos().x();
-    EndPoint->y = height() - 1 - e->pos().y();
+    EndPoint->X = e->pos().x();
+    EndPoint->Y = height() - 1 - e->pos().y();
     LState = LINE_BEGIN;
     drawLine();
   }
@@ -119,8 +133,8 @@ void ToyGLWidget::drawLine()
   glBindBuffer(GL_PIXEL_UNPACK_BUFFER, FrontBackBuffers[(CurrentFront+1)%2]);
   char* buffer = (char*) glMapBuffer(GL_PIXEL_UNPACK_BUFFER, GL_READ_WRITE);
   assert(buffer != NULL);
-  struct ToySize bufferSize = {800, 600};
-  Engine->rasterizeLine(*StartPoint, *EndPoint, buffer, bufferSize);
+  struct ToySizei bufferSize = {800, 600};
+//  Engine->rasterizeLine(*StartPoint, *EndPoint, buffer, bufferSize);
   glUnmapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB);
   CurrentFront = (CurrentFront+1)%2;
   updateGL();

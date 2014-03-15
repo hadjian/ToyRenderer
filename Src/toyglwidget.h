@@ -5,7 +5,7 @@
 class QMouseEvent;
 
 class ToyRenderEngine;
-class ToyMatrix;
+class ToyCamera;
 struct ToyPoint;
 
 typedef enum {LINE_BEGIN, LINE_FOLLOW} LineState;
@@ -18,9 +18,8 @@ public:
     
 signals:
     
-public slots:
-
 protected:
+  ToyCamera* Camera;
   ToyRenderEngine* Engine;
   GLuint* FrontBackBuffers;
   int CurrentFront;
@@ -35,8 +34,6 @@ protected:
   void initializeGL();
   void resizeGL(int width, int height);
   void paintGL();
-
-private:
   void drawLine();
 };
 
