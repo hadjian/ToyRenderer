@@ -27,7 +27,7 @@ class ToyCamera {
 public:
   ToyMatrix<float> Basis;
   ToyVector<float> Position;
-  struct ToySizef   ViewPort;
+  struct ToySizef  ViewPort;
   float            FocalLength; 
 };
 

@@ -13,6 +13,7 @@ ToyGLWidget::ToyGLWidget(ToyRenderEngine* engine, QWidget *parent) :
   QGLWidget(parent),
   LState(LINE_BEGIN)
 {
+
   Camera = new ToyCamera();
   float *position = new float[4];
   position[0]=0.0; position[1]=0.0; position[2]=1.0; position[3]=1.0;
