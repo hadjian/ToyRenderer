@@ -6,5 +6,11 @@ find_package(Qt4 REQUIRED QtCore)
 # The following will also set the compiler definitions.
 include(${QT_USE_FILE})
 
-add_library(toyrenderengine SHARED toyrenderengine.cpp toygeometry.cpp ${CMAKE_SOURCE_DIR}/Include/toygeometry.h ${CMAKE_SOURCE_DIR}/Include/toyrenderengine.h)
+add_library(toyrenderengine SHARED 
+             toyrenderengine.cpp
+             toygeometry.cpp 
+             toyrenderhelper.cpp
+             ${CMAKE_SOURCE_DIR}/Include/toygeometry.h 
+             ${CMAKE_SOURCE_DIR}/Include/toyrenderengine.h
+             ${CMAKE_SOURCE_DIR}/Include/toyrenderhelper.h)
 target_link_libraries(toyrenderengine ${QT_LIBRARIES})

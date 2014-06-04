@@ -13,6 +13,7 @@ ToyMainWindow::ToyMainWindow(ToyRenderEngine* engine, QWidget *parent) :
   ToyGLWidget *openGL = new ToyGLWidget(engine, this);
   setCentralWidget(openGL);
   setWindowTitle(tr("My first Software Renderer"));
+  setMaximumSize(800,600);
 }
 
 ToyMainWindow::~ToyMainWindow()

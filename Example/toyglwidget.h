@@ -2,13 +2,12 @@
 #define GLWIDGET_H
 
 #include <QGLWidget>
+#include <QPoint>
 class QMouseEvent;
 
 class ToyRenderEngine;
 class ToyCamera;
 struct ToyPoint;
-
-typedef enum {LINE_BEGIN, LINE_FOLLOW} LineState;
 
 class ToyGLWidget : public QGLWidget
 {
@@ -19,14 +18,17 @@ public:
 signals:
     
 protected:
-  ToyCamera* Camera;
+  ToyCamera*       Camera;
   ToyRenderEngine* Engine;
-  GLuint* FrontBackBuffers;
-  int CurrentFront;
-  struct ToyPoint* StartPoint;
-  struct ToyPoint* EndPoint;
-  LineState LState;
 
+  struct ToySizei* BufferSize;
+  GLuint*          FrontBackBuffers;
+  int              CurrentFront;
+
+  QPoint      LastMousePosition;
+  float       RotX, RotY;
+  const float Pixel2Degree;
+ 
   void mousePressEvent(QMouseEvent* e);
   void mouseMoveEvent(QMouseEvent* e);
   void mouseReleaseEvent(QMouseEvent* e);
@@ -34,7 +36,7 @@ protected:
   void initializeGL();
   void resizeGL(int width, int height);
   void paintGL();
-  void drawLine();
+  void draw();
 };
 
 #endif // GLWIDGET_H

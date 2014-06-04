@@ -20,3 +20,7 @@ target_link_libraries(testtoyrenderengine ${GTEST_MAIN_LIBRARIES} toyrenderengin
 set_target_properties(testtoyrenderengine PROPERTIES
                        COMPILE_FLAGS ${GTEST_CXX_FLAGS})
 
+add_executable(testtoyrenderhelper testtoyrenderhelper.cpp ${CMAKE_SOURCE_DIR}/Include/toyrenderhelper.h)
+target_link_libraries(testtoyrenderhelper ${GTEST_MAIN_LIBRARIES} toyrenderengine)
+set_target_properties(testtoyrenderhelper PROPERTIES
+                       COMPILE_FLAGS ${GTEST_CXX_FLAGS})

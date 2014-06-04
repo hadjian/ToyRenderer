@@ -29,6 +29,10 @@ public:
   ToyVector<float> Position;
   struct ToySizef  ViewPort;
   float            FocalLength; 
+
+  void rotateX(float degree);
+  void rotateY(float degree);
+  void rotateZ(float degree);
 };
 
 class ToyRenderEngine {
@@ -41,10 +45,8 @@ public:
 
 protected:
   ToyVector<int>** projectGeometry(const ToyGeometry& geometry, const ToyCamera& camera, const struct ToySizei& bufferSize);
-  void rasterizeLine(ToyVector<int>** projectedPoints, char* buffer, struct ToySizei buffersize);
+  void rasterizeLine(ToyPoint& p1, ToyPoint& p2, char* buffer, struct ToySizei buffersize);
   QList<ToyGeometry*> Geometries;
-
-private:
 };
 
 #endif // TOYRENDERENGINE_H
