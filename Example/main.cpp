@@ -5,7 +5,7 @@
 #include <cstdio>
 using namespace std;
 
-#include <QtGui/QApplication>
+#include <QApplication>
 
 int main(int argc, char* argv[]) {
   QApplication a(argc, argv);
