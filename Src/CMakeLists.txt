@@ -1,7 +1,8 @@
 # CMakeLists.txt for the Src subdirectory.
 
-# Make available the Qt libraries and macros.
-find_package(Qt5Widgets REQUIRED)
+find_package(Qt5Core)
+include_directories(${Qt5Core_INCLUDE_DIRS})
+add_definitions(${Qt5Core_DEFINITIONS})
 
 add_library(toyrenderengine SHARED 
              toyrenderengine.cpp
@@ -10,5 +11,4 @@ add_library(toyrenderengine SHARED
              ${CMAKE_SOURCE_DIR}/Include/toygeometry.h 
              ${CMAKE_SOURCE_DIR}/Include/toyrenderengine.h
              ${CMAKE_SOURCE_DIR}/Include/toyrenderhelper.h)
-target_link_libraries(toyrenderengine ${QT_LIBRARIES})
-qt5_use_modules(toyrenderengine Core)
+target_link_libraries(toyrenderengine Qt5::Core)
