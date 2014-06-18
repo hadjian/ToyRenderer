@@ -37,4 +37,4 @@ add_executable(toyrendererexample
                  ${toyrendererexample_FORMS_HEADERS}
                  ${CMAKE_SOURCE_DIR}/Include/toygeometry.h
                  ${CMAKE_SOURCE_DIR}/Include/toyrenderengine.h)
-target_link_libraries(toyrendererexample toyrenderengine ${GLEW_LIBRARY} Qt5::Widgets Qt5::Core Qt5::OpenGL Qt5::Gui)
+target_link_libraries(toyrendererexample toyrenderengine ${GLEW_LIBRARY} ${OPENGL_LIBRARY} Qt5::Widgets Qt5::Core Qt5::OpenGL Qt5::Gui)
