@@ -1,19 +1,14 @@
 # CMakeLists.txt for the Src subdirectory.
 
-find_package(Qt4 REQUIRED QtCore QtGui QtOpenGL)
-find_library(GLEW_LIBRARY GLEW)
+find_package(Qt5Core)
+include_directories(${Qt5Core_INCLUDE_DIRS})
+add_definitions(${Qt5Core_DEFINITIONS})
 
-set(toyrenderer_SOURCES main.cpp toyglwidget.cpp toymainwindow.cpp toyrenderengine.cpp)  
-# toyrenderer_HEADERS is currently empty. Leaving here for reference.
-set(toyrenderer_HEADERS )
-set(toyrenderer_FORMS mainwindow.ui)
- 
-QT4_WRAP_UI(toyrenderer_FORMS_HEADERS ${toyrenderer_FORMS})
-QT4_WRAP_CPP(toyrenderer_HEADERS_MOC ${toyrenderer_HEADERS})
-
-include(${QT_USE_FILE})
-add_definitions(${QT_DEFINITIONS})
-
-include_directories(${CMAKE_CURRENT_BINARY_DIR})
-add_executable(toyrenderer ${toyrenderer_SOURCES} ${toyrenderer_HEADERS_MOC} ${toyrenderer_FORMS_HEADERS})
-target_link_libraries(toyrenderer ${QT_LIBRARIES} ${GLEW_LIBRARY})
+add_library(toyrenderengine SHARED 
+             toyrenderengine.cpp
+             toygeometry.cpp 
+             toyrenderhelper.cpp
+             ${CMAKE_SOURCE_DIR}/Include/toygeometry.h 
+             ${CMAKE_SOURCE_DIR}/Include/toyrenderengine.h
+             ${CMAKE_SOURCE_DIR}/Include/toyrenderhelper.h)
+target_link_libraries(toyrenderengine Qt5::Core)
