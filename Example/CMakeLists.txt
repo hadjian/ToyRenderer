@@ -1,4 +1,4 @@
-# CMakeLists.txt for the Src subdirectory.
+# CMakeLists.txt for the Example subdirectory.
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -38,3 +38,7 @@ add_executable(toyrendererexample
                  ${CMAKE_SOURCE_DIR}/Include/toygeometry.h
                  ${CMAKE_SOURCE_DIR}/Include/toyrenderengine.h)
 target_link_libraries(toyrendererexample toyrenderengine ${GLEW_LIBRARY} ${OPENGL_LIBRARY} Qt5::Widgets Qt5::Core Qt5::OpenGL Qt5::Gui)
+add_custom_command(TARGET toyrendererexample 
+    POST_BUILD COMMAND 
+    ${CMAKE_INSTALL_NAME_TOOL} -add_rpath "@executable_path/../../"
+    $<TARGET_FILE:toyrendererexample>)
